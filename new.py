@@ -8,7 +8,7 @@ g = rdflib.Graph()
 g.parse("si.ttl", format="ttl")
 g.parse("quantities.ttl", format="ttl")
 g.parse("decisions.ttl", format="ttl")
-g.parse("constants.ttl", format="ttl")s
+g.parse("constants.ttl", format="ttl")
 g.parse("units.ttl", format="ttl")
 g.parse("prefixes.ttl", format="ttl")
 
