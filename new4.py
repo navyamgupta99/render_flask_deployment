@@ -28,7 +28,6 @@ def index():
     """
     return render_template('index.html')
 
-
 @app.route('/search', methods=['POST'])
 def search():
     """
@@ -87,8 +86,10 @@ def search():
                 # Link to the /resolution page with query parameter
                 processed_results["Defining Constant"] = f'<a href="/resolution?value={obj}" target="_blank">{remove_url_prefix(obj)}</a>'
             elif "hasDefiningResolution" in pred:
-                # Link to the /resolution page with query parameter
-                processed_results["Defining Resolution"] = f'<a href="/resolution?value={obj}" target="_blank">{remove_url_prefix(obj)}</a>'
+                # Dynamically create the URL for the BIPM page
+                defining_resolution_value = remove_url_prefix(obj)
+                bipm_url = f'https://www.bipm.org/en/defining-resolution/{defining_resolution_value}'  # Example URL pattern
+                processed_results["Defining Resolution"] = f'{defining_resolution_value} - <a href="{bipm_url}" target="_blank">Visit BIPM for Defining Resolution</a>'
             elif "hasUnitTypeAsString" in pred:
                 processed_results["Unit Type"] = remove_url_prefix(obj)
             elif "hasUnit" in pred:
@@ -108,6 +109,32 @@ def search():
     except Exception as e:
         print(f"Error during query execution: {e}")
         return f"An error occurred: {e}"
+
+
+
+
+
+# # New route to handle fetching data from BIPM.org
+# def fetch_bipm_data(value):
+#     # Logic to parse data from BIPM.org based on the 'value' parameter
+#     # This is where you can use requests or a similar library to scrape or request info
+#     bipm_data = f"Fetched data for {value} from BIPM.org"  # Placeholder
+#     return bipm_data
+
+
+# @app.route('/bipm_info')
+# def bipm_info():
+#     value = request.args.get('value', '').strip()
+#     if not value:
+#         return "No value provided!"
+
+#     try:
+#         bipm_data = fetch_bipm_data(value)
+#         return render_template('bipm_info.html', value=value, bipm_data=bipm_data)
+#     except Exception as e:
+#         print(f"Error fetching BIPM data: {e}")
+#         return f"An error occurred while fetching BIPM data: {e}"
+
 
 def format_symbol(symbol):
     """
@@ -204,4 +231,4 @@ def resolution():
         return render_template('resolution.html', heading="Error Occurred", data=[])
 if __name__ == "__main__":
     # Run the Flask app on port 8080, accessible on all network interfaces
-    app.run()
+    app.run(host="0.0.0.0", port=8080)
